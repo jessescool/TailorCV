@@ -10,33 +10,21 @@ import sys
 import argparse
 from copy import deepcopy
 
-def should_include_item(item, profile_config):
-    """Check if an item should be included based on its tags and profile config."""
+def should_include_item(item, profile_tag):
+    """Check if an item should be included based on its tags and profile tag."""
     if not isinstance(item, dict):
         return True
     
     item_tags = item.get('tags', [])
     
-    # Check exclude tags first
-    exclude_tags = profile_config.get('exclude_tags', [])
-    if any(tag in exclude_tags for tag in item_tags):
-        return False
+    # Always include untagged items
+    if not item_tags:
+        return True
     
-    # Check include tags
-    include_tags = profile_config.get('include_tags', [])
-    if include_tags:
-        # If include_tags is specified
-        if item_tags:
-            # Item has tags - check if any match include_tags
-            return any(tag in include_tags for tag in item_tags)
-        else:
-            # Item has no tags - use include_untagged setting
-            return profile_config.get('include_untagged', True)
-    
-    # If no include_tags specified, include everything not excluded
-    return True
+    # Include if the profile tag is in the item's tags
+    return profile_tag in item_tags
 
-def filter_highlights(highlights, profile_config):
+def filter_highlights(highlights, profile_tag):
     """Filter highlights list, converting tagged highlights to plain strings."""
     if not isinstance(highlights, list):
         return highlights
@@ -46,16 +34,15 @@ def filter_highlights(highlights, profile_config):
     for highlight in highlights:
         if isinstance(highlight, dict) and 'text' in highlight:
             # This is a tagged highlight with text and tags
-            if should_include_item(highlight, profile_config):
+            if should_include_item(highlight, profile_tag):
                 # Keep just the text content, removing tags
                 filtered_highlights.append(highlight['text'])
         elif isinstance(highlight, str):
-            # This is a plain string highlight
-            if profile_config.get('include_untagged', True):
-                filtered_highlights.append(highlight)
+            # This is a plain string highlight - always include (untagged)
+            filtered_highlights.append(highlight)
         else:
             # Other format, check for tags
-            if should_include_item(highlight, profile_config):
+            if should_include_item(highlight, profile_tag):
                 # Remove tags if present
                 if isinstance(highlight, dict) and 'tags' in highlight:
                     clean_highlight = {k: v for k, v in highlight.items() if k != 'tags'}
@@ -65,8 +52,8 @@ def filter_highlights(highlights, profile_config):
     
     return filtered_highlights
 
-def filter_data(data, profile_config):
-    """Recursively filter data structure based on profile config."""
+def filter_data(data, profile_tag):
+    """Recursively filter data structure based on profile tag."""
     if isinstance(data, dict):
         filtered_data = {}
         for key, value in data.items():
@@ -75,20 +62,17 @@ def filter_data(data, profile_config):
                 continue
             elif key == 'highlights':
                 # Special handling for highlights
-                filtered_value = filter_highlights(value, profile_config)
+                filtered_value = filter_highlights(value, profile_tag)
                 if filtered_value:  # Only include if not empty
                     filtered_data[key] = filtered_value
-            elif key == 'authors':
-                # Special handling for authors - don't filter, just pass through
-                filtered_data[key] = value
             elif isinstance(value, list):
                 # Regular list filtering
-                filtered_value = filter_list(value, profile_config)
+                filtered_value = filter_list(value, profile_tag)
                 if filtered_value:  # Only include if not empty
                     filtered_data[key] = filtered_value
             elif isinstance(value, dict):
                 # Recursive dict filtering
-                filtered_value = filter_data(value, profile_config)
+                filtered_value = filter_data(value, profile_tag)
                 if filtered_value:  # Only include if not empty
                     filtered_data[key] = filtered_value
             else:
@@ -96,11 +80,11 @@ def filter_data(data, profile_config):
                 filtered_data[key] = value
         return filtered_data
     elif isinstance(data, list):
-        return filter_list(data, profile_config)
+        return filter_list(data, profile_tag)
     else:
         return data
 
-def filter_list(items, profile_config):
+def filter_list(items, profile_tag):
     """Filter a list of items based on tags."""
     if not isinstance(items, list):
         return items
@@ -110,9 +94,9 @@ def filter_list(items, profile_config):
     for item in items:
         if isinstance(item, dict):
             # Check if this item should be included
-            if should_include_item(item, profile_config):
+            if should_include_item(item, profile_tag):
                 # Process the item recursively
-                filtered_item = filter_data(item, profile_config)
+                filtered_item = filter_data(item, profile_tag)
                 if filtered_item:  # Only include if not empty
                     filtered_items.append(filtered_item)
         else:
@@ -121,25 +105,14 @@ def filter_list(items, profile_config):
     
     return filtered_items
 
-def filter_sections(cv_data, profile_config):
-    """Filter sections based on include/exclude section lists."""
+def filter_sections(cv_data, profile_tag):
+    """Filter sections based on tags."""
     sections = cv_data.get('sections', {})
     filtered_sections = {}
     
-    include_sections = profile_config.get('include_sections', [])
-    exclude_sections = profile_config.get('exclude_sections', [])
-    
     for section_name, section_data in sections.items():
-        # Check if section should be excluded
-        if exclude_sections and section_name in exclude_sections:
-            continue
-            
-        # Check if section should be included
-        if include_sections and section_name not in include_sections:
-            continue
-            
         # Filter the section data
-        filtered_section = filter_data(section_data, profile_config)
+        filtered_section = filter_data(section_data, profile_tag)
         if filtered_section:  # Only include if not empty
             filtered_sections[section_name] = filtered_section
     
@@ -164,18 +137,18 @@ def main():
         print(f"Error parsing YAML: {e}", file=sys.stderr)
         sys.exit(1)
     
-    # Get profile configuration
+    # Get profile tag
     profiles = data.get('profiles', {})
     if args.profile not in profiles:
         print(f"Error: Profile '{args.profile}' not found in input file", file=sys.stderr)
         print(f"Available profiles: {list(profiles.keys())}", file=sys.stderr)
         sys.exit(1)
     
-    profile_config = profiles[args.profile]
+    profile_tag = profiles[args.profile]
     
     if args.verbose:
         print(f"Loaded master YAML: {args.input_file}", file=sys.stderr)
-        print(f"Applying profile: {args.profile}", file=sys.stderr)
+        print(f"Applying profile: {args.profile} (tag: {profile_tag})", file=sys.stderr)
     
     # Create filtered data
     output_data = deepcopy(data)
@@ -186,7 +159,7 @@ def main():
     
     # Filter sections
     if 'cv' in output_data and 'sections' in output_data['cv']:
-        filtered_sections = filter_sections(output_data['cv'], profile_config)
+        filtered_sections = filter_sections(output_data['cv'], profile_tag)
         output_data['cv']['sections'] = filtered_sections
     
     # Output filtered data

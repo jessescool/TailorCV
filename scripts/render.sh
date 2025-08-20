@@ -52,6 +52,11 @@ fi
 # Set default output if not provided
 if [[ -z "$OUTPUT" ]]; then
   OUTPUT="dist/${PROFILE}.pdf"
+else
+  # If custom output doesn't start with /, put it in dist/
+  if [[ "$OUTPUT" != /* ]]; then
+    OUTPUT="dist/${OUTPUT}"
+  fi
 fi
 
 # 1: filter master YAML with branchCV

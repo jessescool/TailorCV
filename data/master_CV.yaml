@@ -12,10 +12,8 @@ cv:
         location: Medford, MA
         start_date: 2022-08
         end_date: 2026-06
-        tags: [academic, math, cs, ai, bio, consulting, full]
         highlights:
           - text: "GPA: 4.00/4.00 ([transcript](https://example.com)) + Dean's List (all semesters)"
-            tags: [academic, consulting, full]
 
       - institution: "University of Oxford, Pembroke College"
         area: Mathematics and Philosophy
@@ -23,10 +21,8 @@ cv:
         location: Oxford, UK
         start_date: 2024-10
         end_date: 2025-07
-        tags: [academic, math, philosophy, ai, bio, consulting, full]
         highlights:
           - text: "1st class marks in all tutorials"
-            tags: [academic, consulting, full]
 
     experience:
       - company: "Levin Lab, Allen Discovery Center"
@@ -34,42 +30,30 @@ cv:
         location: "Boston, MA"
         start_date: "2025-03"
         end_date: "present"
-        tags: [ai, bio, research, academic, full]
         highlights:
           - text: "under Michael Levin, Samantha Petti, and Erik Hoel, awarded Tufts' Summer Scholars grant to support an undergraduate thesis on information capture within scales of complex systems"
-            tags: [research, academic, ai, bio, full]
           - text: "simulating and evaluating self-organizing systems in Python, analyzing information processing capability across scales with tools from information theory and probability"
-            tags: [ai, bio, research, python, full]
 
       - company: "Petti Lab"
         position: "Researcher"
         location: "Boston, MA"
         start_date: "2024-05"
         end_date: "present"
-        tags: [ai, bio, research, academic, full]
         highlights:
           - text: "co-authored in *Bioinformatics* (2025) on a novel, state-of-the-art structural alphabet for protein alignment"
-            tags: [bio, research, academic, publication, full]
           - text: "architected, trained, and evaluated vector-quantized variational autoencoders (VQ-VAEs) in PyTorch on HPC cluster as non-linear clustering tools for protein characterization"
-            tags: [ai, bio, pytorch, ml, hpc, full]
           - text: "applied bioinformatics metrics including lDDT, Smith–Waterman, and BLOSUM for pipeline optimization"
-            tags: [bio, research, algorithms, full]
           - text: "reverse-engineered Foldseek to integrate our new structural alphabet, created an end-to-end pipeline"
-            tags: [bio, engineering, pipeline, full]
           - text: "experienced and overcame failure to produce a new industry benchmark"
-            tags: [research, resilience, consulting, full]
 
       - company: "TUPIT and the Petey Greene Program"
         position: "Volunteer"
         location: "Shirley, MA"
         start_date: "2024-03"
         end_date: "present"
-        tags: [teaching, leadership, consulting, full]
         highlights:
           - text: "taught mathematics to incarcerated students at MCI-Shirley through TUPIT and Petey Greene programs"
-            tags: [teaching, math, leadership, consulting, full]
           - text: "structured and delivered lessons in basic math, probability, adapted to varying educational backgrounds"
-            tags: [teaching, math, consulting, communication, full]
 
     publications:
       - title: "An interpretable alphabet for local protein structure search based on amino acid neighborhoods"
@@ -81,68 +65,32 @@ cv:
         date: "2025-05-01"
         journal: "Bioinformatics"
         doi: "10.TBD"
-        tags: [bio, research, publication, academic, ai, full]
 
     projects:
       - name: "Captain's Log | *(Swift, SwiftUI, MongoDB, SQLite)*"
         date: "in progress"
-        tags: [ai, engineering, mobile, full]
         highlights:
           - text: "voice-logging application with on-device transcription and cosine-search for audio logging and memory recall"
-            tags: [ai, mobile, ml, search, full]
 
       - name: "[Trek Trivia](https://trektrivia.com) | *(HTML/CSS, JS ES6)*"
         date: "2021"
-        tags: [web, engineering, full]
         highlights:
           - text: "gathers community-sourced questions to increase diversity and challenge level of question bank"
-            tags: [community, web, full]
           - text: "self-taught, stems from my passion for Star Trek"
-            tags: [self-taught, passion, full]
 
     technologies:
       - label: "Languages"
         details: "C++, Python, Java, ES6, Swift, Bash scripting"
-        tags: [programming, languages, full]
       - label: "Software"
         details: "NumPy, Pandas, PyTorch, scikit-learn, SciPy, CUDA, Git, Docker, Kubernetes, SLURM, Emacs"
-        tags: [tools, ai, ml, devops, full]
       - label: "OS"
         details: "Linux-based, Arch, any CLI"
-        tags: [systems, linux, full]
 
 profiles:
-  ai:
-    description: "AI/ML Engineer roles"
-    include_tags: [ai]
-    exclude_tags: []
-    include_sections: [education, experience, publications, projects, technologies]
-    exclude_sections: []
-    include_untagged: false
-    
-  bio:
-    description: "Bioinformatics and research roles"
-    include_tags: [bio, research, academic, publication, python, ai, ml, programming, tools, systems, full]
-    exclude_tags: []
-    include_sections: [education, experience, publications, projects, technologies]
-    exclude_sections: []
-    include_untagged: false
-    
-  consulting:
-    description: "Consulting and leadership roles"
-    include_tags: [consulting, leadership, teaching, communication, academic, resilience, math, programming, tools, systems, full]
-    exclude_tags: []
-    include_sections: [education, experience, projects, technologies]
-    exclude_sections: [publications]
-    include_untagged: false
-    
-  full:
-    description: "Complete resume with everything"
-    include_tags: [full]
-    exclude_tags: []
-    include_sections: [education, experience, publications, projects, technologies]
-    exclude_sections: []
-    include_untagged: true
+  ai: ai
+  bio: bio
+  consulting: consulting
+  default: default
 
 design:
   theme: sb2nov
