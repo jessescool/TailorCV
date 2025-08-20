@@ -1,35 +1,73 @@
-#!/usr/bin/env bash
-# render.sh: Generate a PDF directly from an existing YAML file
-# Usage:
-#   ./scripts/render.sh -i build/tufts.bio.filtered.yaml -o dist/tufts-bio-resume.pdf
-set -euo pipefail
+#!/bin/bash
+set -e  # Exit on error
 
-IN=""; OUTPDF=""
-while getopts ":i:o:h" opt; do
-  case "$opt" in
-    i) IN="$OPTARG" ;;
-    o) OUTPDF="$OPTARG" ;;
-    h) echo "Usage: $0 -i INPUT_YAML -o OUT_PDF"; exit 0 ;;
-    *) echo "Bad args"; exit 2 ;;
+# rendered.sh - Simple CV renderer
+# Usage: rendered.sh -p PROFILE [-o OUTPUT_FILE]
+
+# Good defaults
+PROFILE=""
+OUTPUT=""
+
+# Parse flags
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -p|--profile)
+      PROFILE="$2"
+      shift 2
+      ;;
+    -o|--output)
+      OUTPUT="$2"
+      shift 2
+      ;;
+    -h|--help)
+      echo "Usage: $0 -p PROFILE [-o OUTPUT_FILE]"
+      echo ""
+      echo "Generate a tailored resume from tagged YAML"
+      echo ""
+      echo "Options:"
+      echo "  -p, --profile PROFILE   Profile to use (ai, bio, consulting, full)"
+      echo "  -o, --output FILE       Output PDF file (default: dist/PROFILE.pdf)"
+      echo "  -h, --help              Show this help"
+      echo ""
+      echo "Examples:"
+      echo "  $0 -p ai                     # Creates dist/ai.pdf"
+      echo "  $0 -p bio -o resume.pdf      # Creates resume.pdf"
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1"
+      echo "Use -h for help"
+      exit 1
+      ;;
   esac
 done
-[[ -n "$IN" && -n "$OUTPDF" ]] || { echo "Missing args"; exit 2; }
 
-command -v rendercv >/dev/null || { echo "Missing: rendercv"; exit 127; }
+# Validate profile
+if [[ -z "$PROFILE" ]]; then
+  echo "Error: -p PROFILE is required"
+  echo "Use -h for help"
+  exit 1
+fi
 
-[[ -f "$IN" ]] || { echo "Input YAML not found: $IN" >&2; exit 1; }
-mkdir -p "$(dirname "$OUTPDF")"
+# Set default output if not provided
+if [[ -z "$OUTPUT" ]]; then
+  OUTPUT="dist/${PROFILE}.pdf"
+fi
 
-# Get a unique temp output folder name based on input file
-TEMP_DIR="/tmp/rendercv_tmp_$(basename "$IN" .yaml)"
+# 1: filter master YAML with branchCV
+FILTERED_YAML="build/${PROFILE}.yaml"
+mkdir -p build
+echo "Filtering CV for profile: $PROFILE"
+python3 scripts/branchCV.py data/master_CV.yaml --profile "$PROFILE" --output "$FILTERED_YAML" --verbose
 
-# Render straight to the requested path; skip HTML/MD/PNG
-echo "Rendering $IN to PDF: $OUTPDF"
-rendercv render "$IN" \
-  --pdf-path "$OUTPDF" \
-  --output-folder-name "$TEMP_DIR" \
+# 2: Render with renderCV
+echo "Generating: $OUTPUT"
+mkdir -p "$(dirname "$OUTPUT")"
+rendercv render "$FILTERED_YAML" \
+  --pdf-path "$OUTPUT" \
+  --output-folder-name "/tmp/render_tmp" \
   --dont-generate-markdown \
   --dont-generate-html \
   --dont-generate-png
 
-echo "✅  $OUTPDF"
+echo "✅ $OUTPUT"
