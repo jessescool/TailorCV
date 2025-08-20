@@ -1,0 +1,167 @@
+cv:
+  name: "Jesse S. Cool"
+  location: "Oakland, CA"
+  email: "jesse@jessecool.me"
+  website: "https://jessecool.me"
+
+  sections:
+    education:
+      - institution: Tufts University
+        area: Mathematics, Cognitive Science
+        degree: BS
+        location: Medford, MA
+        start_date: 2022-08
+        end_date: 2026-06
+        highlights:
+          - text: "GPA: 4.00/4.00 ([transcript](https://example.com)) + Dean's List (all semesters)"
+            tags: [ai, bio, consulting]
+        tags: [ai, bio, consulting]
+
+      - institution: "University of Oxford, Pembroke College"
+        area: Mathematics and Philosophy
+        degree: Visiting
+        location: Oxford, UK
+        start_date: 2024-10
+        end_date: 2025-07
+        highlights:
+          - text: "1st class marks in all tutorials"
+            tags: [ai, bio, consulting]
+        tags: [ai, bio, consulting]
+
+    experience:
+      - company: "Levin Lab, Allen Discovery Center"
+        position: "Researcher"
+        location: "Boston, MA"
+        start_date: "2025-03"
+        end_date: "present"
+        tags: [ai, bio, research]
+        highlights:
+          - text: "under Michael Levin, Samantha Petti, and Erik Hoel, awarded Tufts' Summer Scholars grant to support an undergraduate thesis on information capture within scales of complex systems"
+            tags: [ai, bio, research]
+          - text: "simulating and evaluating self-organizing systems in Python, analyzing information processing capability across scales with tools from information theory and probability"
+            tags: [ai, bio, research, python]
+
+      - company: "Petti Lab"
+        position: "Researcher"
+        location: "Boston, MA"
+        start_date: "2024-05"
+        end_date: "present"
+        tags: [ai, bio, research]
+        highlights:
+          - text: "co-authored in *Bioinformatics* (2025) on a novel, state-of-the-art structural alphabet for protein alignment"
+            tags: [ai, bio, research, publication]
+          - text: "architected, trained, and evaluated vector-quantized variational autoencoders (VQ-VAEs) in PyTorch on HPC cluster as non-linear clustering tools for protein characterization"
+            tags: [ai, bio, research, python, ml]
+          - text: "applied bioinformatics metrics including lDDT, Smith–Waterman, and BLOSUM for pipeline optimization"
+            tags: [ai, bio, research]
+          - text: "reverse-engineered Foldseek to integrate our new structural alphabet, created an end-to-end pipeline"
+            tags: [ai, bio, research, engineering]
+          - text: "experienced and overcame failure to produce a new industry benchmark"
+            tags: [ai, bio, research]
+
+      - company: "TUPIT and the Petey Greene Program"
+        position: "Volunteer"
+        location: "Shirley, MA"
+        start_date: "2024-03"
+        end_date: "present"
+        tags: [education, consulting, leadership]
+        highlights:
+          - text: "taught mathematics to incarcerated students at MCI-Shirley through TUPIT and Petey Greene programs"
+            tags: [education, consulting, leadership]
+          - text: "structured and delivered lessons in basic math, probability, adapted to varying educational backgrounds"
+            tags: [education, consulting, leadership]
+
+    publications:
+      - title: "An interpretable alphabet for local protein structure search based on amino acid neighborhoods"
+        authors: 
+          - S. Zerefa
+          - '**J. Cool**'
+          - P. Singh
+          - S. Petti
+        date: "2025-05-01"
+        journal: "Bioinformatics"
+        doi: "10.TBD"
+        tags: [ai, bio, research]
+
+    projects:
+      - name: "Captain's Log | *(Swift, SwiftUI, MongoDB, SQLite)*"
+        date: "in progress"
+        tags: [ai, mobile, engineering]
+        highlights:
+          - text: "voice-logging application with on-device transcription and cosine-search for audio logging and memory recall"
+            tags: [ai, mobile, engineering]
+
+      - name: "[Trek Trivia](https://trektrivia.com) | *(HTML/CSS, JS ES6)*"
+        date: "2021"
+        tags: [web, engineering]
+        highlights:
+          - text: "gathers community-sourced questions to increase diversity and challenge level of question bank"
+            tags: [web, engineering]
+          - text: "self-taught, stems from my passion for Star Trek"
+            tags: [web, personal]
+
+    technologies:
+      - label: "Languages"
+        details: "C++, Python, Java, ES6, Swift, Bash scripting"
+        tags: [ai, bio, consulting, engineering]
+      - label: "Software"
+        details: "NumPy, Pandas, PyTorch, scikit-learn, SciPy, CUDA, Git, Docker, Kubernetes, SLURM, Emacs"
+        tags: [ai, bio, consulting, engineering]
+      - label: "OS"
+        details: "Linux-based, Arch, any CLI"
+        tags: [ai, bio, consulting, engineering]
+
+profiles:
+  ai:
+    description: "AI/ML focused roles"
+    include_tags: [ai, research, ml, python, engineering]
+    exclude_tags: [personal]
+    include_sections: [education, experience, publications, projects, technologies]
+    include_untagged: false
+
+  bio:
+    description: "Bioinformatics and research roles"
+    include_tags: [bio, research, ai, python, engineering]
+    exclude_tags: [personal, web]
+    include_sections: [education, experience, publications, projects, technologies]
+    include_untagged: false
+
+  consulting:
+    description: "Consulting and leadership roles"
+    include_tags: [consulting, leadership, education, engineering]
+    exclude_tags: [personal]
+    include_sections: [education, experience, technologies]
+    include_untagged: true
+
+  full:
+    description: "Complete resume with everything"
+    include_tags: []
+    exclude_tags: []
+    include_sections: []
+    include_untagged: true
+
+design:
+  theme: sb2nov
+  page:
+    show_last_updated_date: false
+    show_page_numbering: false
+  text:
+    font_family: "XCharter"
+    font_size: 10pt
+    alignment: left
+  header:
+    name_font_family: "XCharter"
+    use_icons_for_connections: false
+  highlights:
+    bullet: "-"
+
+rendercv_settings:
+  render_command:
+    output_folder_name: rendercv_output
+    dont_generate_html: true
+    dont_generate_markdown: true
+    dont_generate_png: true
+
+locale:
+  language: en
+  phone_number_format: E164
