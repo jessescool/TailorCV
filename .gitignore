@@ -1,0 +1,34 @@
+# Build artifacts
+build/
+dist/
+
+# PDF outputs
+*.pdf
+
+# macOS system files
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python cache (if using any Python tools)
+__pycache__/
+*.pyc
+*.pyo
+
+# Node modules (if using any Node.js tools)
+node_modules/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local

@@ -1,0 +1,17 @@
+cv:
+  label: "Strategy & Analytics"
+  sections:
+    summary:
+      - "Analytical strategy: market sizing, pricing, storytelling, automation."
+design:
+  theme: engineeringresumes
+  colors:
+    name: "#1D3557"  # Business blue
+    section_titles: "#1D3557"
+    links: "#1D3557"
+  text:
+    font_family: "Lato"  # Clean, professional font
+  section_titles:
+    bold: true
+rendercv_settings:
+  bold_keywords: ["Excel","Storytelling","Analytics","Python"]

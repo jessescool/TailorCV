@@ -1,0 +1,15 @@
+cv:
+  label: "Computational Biology"
+  sections:
+    summary:
+      - "Comp bio: high-throughput assays, ML screening, published research."
+design:
+  theme: classic
+  colors:
+    name: "#00533E"  # Forest green (looks scientific/academic)
+    section_titles: "#00533E"
+    links: "#00533E"
+  text:
+    font_family: "EB Garamond"  # Academic-looking font
+rendercv_settings:
+  bold_keywords: ["NGS","AAV","Protein Engineering","Python"]
