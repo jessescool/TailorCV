@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-branchCV - Filter tagged YAML by profile
+tailorCV - Filter tagged YAML by profile
 
 Pure filtering tool: takes tagged YAML, applies profile, outputs clean YAML.
 """

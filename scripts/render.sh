@@ -21,7 +21,7 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     -h|--help)
-      echo "Usage: $0 [YAML_FILE] -p PROFILE [-o OUTPUT_FILE]"
+      echo "Usage: $0 [YAML_FILE] [-p PROFILE] [-o OUTPUT_FILE]"
       echo ""
       echo "Generate a tailored resume from tagged YAML"
       echo ""
@@ -29,7 +29,7 @@ while [[ $# -gt 0 ]]; do
       echo "  YAML_FILE               Input YAML file (default: data/master_CV.yaml)"
       echo ""
       echo "Options:"
-      echo "  -p, --profile PROFILE   Profile to use (ai, bio, consulting, default)"
+      echo "  -p, --profile PROFILE   Profile to use (default: default)"
       echo "  -o, --output FILE       Output PDF file (default: dist/PROFILE.pdf)"
       echo "  -h, --help              Show this help"
       echo ""
@@ -63,11 +63,9 @@ if [[ -z "$INPUT_FILE" ]]; then
   INPUT_FILE="data/master_CV.yaml"
 fi
 
-# Validate profile
+# Set default profile if not provided
 if [[ -z "$PROFILE" ]]; then
-  echo "Error: -p PROFILE is required"
-  echo "Use -h for help"
-  exit 1
+  PROFILE="default"
 fi
 
 # Set default output if not provided
@@ -80,11 +78,11 @@ else
   fi
 fi
 
-# 1: filter master YAML with branchCV
+# 1: filter master YAML with tailorCV
 FILTERED_YAML="build/${PROFILE}.yaml"
 mkdir -p build
 echo "Filtering CV for profile: $PROFILE (from: $INPUT_FILE)"
-python3 scripts/branchCV.py "$INPUT_FILE" --profile "$PROFILE" --output "$FILTERED_YAML" --verbose
+python3 scripts/tailorCV.py "$INPUT_FILE" --profile "$PROFILE" --output "$FILTERED_YAML" --verbose
 
 # 2: Render with renderCV
 echo "Generating: $OUTPUT"
