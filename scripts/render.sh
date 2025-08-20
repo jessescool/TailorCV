@@ -2,13 +2,14 @@
 set -e  # Exit on error
 
 # rendered.sh - Simple CV renderer
-# Usage: rendered.sh -p PROFILE [-o OUTPUT_FILE]
+# Usage: rendered.sh [YAML_FILE] -p PROFILE [-o OUTPUT_FILE]
 
 # Good defaults
+INPUT_FILE=""
 PROFILE=""
 OUTPUT=""
 
-# Parse flags
+# Parse positional and flags
 while [[ $# -gt 0 ]]; do
   case $1 in
     -p|--profile)
@@ -20,27 +21,47 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     -h|--help)
-      echo "Usage: $0 -p PROFILE [-o OUTPUT_FILE]"
+      echo "Usage: $0 [YAML_FILE] -p PROFILE [-o OUTPUT_FILE]"
       echo ""
       echo "Generate a tailored resume from tagged YAML"
       echo ""
+      echo "Arguments:"
+      echo "  YAML_FILE               Input YAML file (default: data/master_CV.yaml)"
+      echo ""
       echo "Options:"
-      echo "  -p, --profile PROFILE   Profile to use (ai, bio, consulting, full)"
+      echo "  -p, --profile PROFILE   Profile to use (ai, bio, consulting, default)"
       echo "  -o, --output FILE       Output PDF file (default: dist/PROFILE.pdf)"
       echo "  -h, --help              Show this help"
       echo ""
       echo "Examples:"
-      echo "  $0 -p ai                     # Creates dist/ai.pdf"
-      echo "  $0 -p bio -o resume.pdf      # Creates resume.pdf"
+      echo "  $0 -p ai                           # Uses data/master_CV.yaml, creates dist/ai.pdf"
+      echo "  $0 other.yaml -p bio               # Uses other.yaml, creates dist/bio.pdf"
+      echo "  $0 -p ai -o my-resume.pdf          # Creates dist/my-resume.pdf"
       exit 0
       ;;
-    *)
+    -*)
       echo "Unknown option: $1"
       echo "Use -h for help"
       exit 1
       ;;
+    *)
+      # This is the positional argument (YAML file)
+      if [[ -z "$INPUT_FILE" ]]; then
+        INPUT_FILE="$1"
+      else
+        echo "Error: Multiple YAML files specified"
+        echo "Use -h for help"
+        exit 1
+      fi
+      shift
+      ;;
   esac
 done
+
+# Set default input file if not provided
+if [[ -z "$INPUT_FILE" ]]; then
+  INPUT_FILE="data/master_CV.yaml"
+fi
 
 # Validate profile
 if [[ -z "$PROFILE" ]]; then
@@ -62,8 +83,8 @@ fi
 # 1: filter master YAML with branchCV
 FILTERED_YAML="build/${PROFILE}.yaml"
 mkdir -p build
-echo "Filtering CV for profile: $PROFILE"
-python3 scripts/branchCV.py data/master_CV.yaml --profile "$PROFILE" --output "$FILTERED_YAML" --verbose
+echo "Filtering CV for profile: $PROFILE (from: $INPUT_FILE)"
+python3 scripts/branchCV.py "$INPUT_FILE" --profile "$PROFILE" --output "$FILTERED_YAML" --verbose
 
 # 2: Render with renderCV
 echo "Generating: $OUTPUT"

@@ -2,6 +2,9 @@
 build/
 dist/
 
+# Personal CV (not for public repo)
+data/JSC_CV.yaml
+
 # PDF outputs
 *.pdf
 
