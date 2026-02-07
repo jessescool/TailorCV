@@ -69,5 +69,3 @@ experience:
 - All tags removed from final output
 
 Works with any RenderCV theme and preserves all formatting.
-
-For RenderCV community <3.
